@@ -20,16 +20,8 @@ proc extractTopThree(filename: string): array[3, int] =
     replaceMin(result, current)
 
 
-proc part1(filename: string): int =
-    extractTopThree(filename).max
-
-
-proc part2(filename: string): int =
-    extractTopThree(filename).foldl(a + b)
-
-
-type Day1Result = tuple[part1: int, part2: int]
-
-
-proc run*(filename: string): Day1Result = 
-    (part1(filename), part2(filename))
+proc run*(filename: string): tuple[part1: int, part2: int] = 
+    let
+        part1 = extractTopThree(filename).max
+        part2 = extractTopThree(filename).foldl(a + b)
+    (part1, part2)
