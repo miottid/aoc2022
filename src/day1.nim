@@ -1,5 +1,4 @@
 import sequtils, algorithm, strutils
-import ./result
 
 
 proc replaceMin(arr: var array[3, int], value: int) =
@@ -21,7 +20,7 @@ proc extractTopThree(filename: string): array[3, int] =
     replaceMin(result, current)
 
 
-proc run*(filename: string): DayResult = 
+proc run*(filename: string): tuple[part1: int, part2: int] = 
     let
         part1 = extractTopThree(filename).max
         part2 = extractTopThree(filename).foldl(a + b)
