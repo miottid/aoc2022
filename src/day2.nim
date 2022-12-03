@@ -1,4 +1,4 @@
-import strutils, tables
+import strutils
 
 
 type 
@@ -6,42 +6,41 @@ type
     Outcome = enum loss = 0, draw = 3, win = 6
 
 
-proc initMove(name: string): Move =
-    if name == "A" or name == "X": Move.rock
-    elif name == "B" or name == "Y": Move.paper
-    elif name == "C" or name == "Z": Move.scissors
+proc toMove(name: string): Move =
+    case name:
+    of "A", "X": rock
+    of "B", "Y": paper
+    of "C", "Z": scissors
     else: raise newException(ValueError, "cannot resolve move: " & name)
 
 
-proc initOutcome(name: string): Outcome =
-    if name == "X": Outcome.loss
-    elif name == "Y": Outcome.draw
-    elif name == "Z": Outcome.win
+proc toOutcome(name: string): Outcome =
+    case name:
+    of "X": loss
+    of "Y": draw
+    of "Z": win
     else: raise newException(ValueError, "cannot resolve outcome: " & name)
 
 
-const
-    winingOutcomeMapping = { 
-        Move.rock: Move.paper,
-        Move.paper: Move.scissors,
-        Move.scissors: Move.rock }.toTable
-
-    losingOutcomeMapping = { 
-        Move.paper: Move.rock,
-        Move.scissors: Move.paper,
-        Move.rock: Move.scissors }.toTable
+proc nextMove(move: Move, outcome: Outcome): Move =
+    case outcome:
+    of draw: move
+    of win: 
+        case move:
+        of rock: paper
+        of paper: scissors
+        of scissors: rock
+    of loss:
+        case move:
+        of rock: scissors
+        of paper: rock
+        of scissors: paper
 
 
 proc computeOutcome(opponent: Move, me: Move): Outcome =
-    if opponent == me: Outcome.draw
-    elif winingOutcomeMapping[opponent] == me: Outcome.win
-    else: Outcome.loss
-
-
-proc resolveMoveForOutcome(opponent: Move, outcome: Outcome): Move =
-    if outcome == Outcome.draw: opponent
-    elif outcome == Outcome.win: winingOutcomeMapping[opponent]
-    else: losingOutcomeMapping[opponent]
+    if opponent == me: draw
+    elif opponent.nextMove(win) == me: win
+    else: loss
 
 
 proc computeScore(opponent: Move, me: Move): int =
@@ -51,16 +50,16 @@ proc computeScore(opponent: Move, me: Move): int =
 proc part1(filename: string): int =
     for line in lines(filename):
         let moves = split(line)
-        result += computeScore(initMove(moves[0]), initMove(moves[1]))
+        result += computeScore(moves[0].toMove, moves[1].toMove)
 
 
 proc part2(filename: string): int =
     for line in lines(filename):
         let 
             moves = split(line)
-            opponent = initMove(moves[0])
-            expectedOutcome = initOutcome(moves[1])
-            me = resolveMoveForOutcome(opponent, expectedOutcome)
+            opponent = moves[0].toMove
+            expectedOutcome = moves[1].toOutcome
+            me = nextMove(opponent, expectedOutcome)
         result += computeScore(opponent, me)
 
 
