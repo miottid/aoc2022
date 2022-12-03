@@ -15,7 +15,25 @@ proc part1(filename: string): int =
             c2 = line[half..line.high].toSeq
             priorities = c1.filterIt(it in c2).deduplicate.map(toPriority)
         result += priorities.foldl(a + b)
-    
+
+
+proc part2(filename: string): int =
+    var 
+        cursor = 1
+        groupItems: seq[char]
+
+    for line in lines(filename):
+        if groupItems.len == 0:
+            groupItems = line.toSeq
+        else:
+            groupItems = groupItems.filterIt(it in line).deduplicate
+
+        if cursor mod 3 == 0:
+            result += groupItems.map(toPriority).foldl(a + b)
+            groupItems = @[]
+
+        cursor += 1
+
 
 proc run*(filename: string): tuple[part1: int, part2: int] =
-    (part1(filename), 0)
+    (part1(filename), part2(filename))
