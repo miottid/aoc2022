@@ -38,8 +38,8 @@ proc nextMove(move: Move, outcome: Outcome): Move =
 
 
 proc computeOutcome(opponent: Move, me: Move): Outcome =
-    if opponent == me: draw
-    elif opponent.nextMove(win) == me: win
+    if me == opponent: draw
+    elif me == opponent.nextMove(win): win
     else: loss
 
 
@@ -56,10 +56,9 @@ proc part1(filename: string): int =
 proc part2(filename: string): int =
     for line in lines(filename):
         let 
-            moves = split(line)
-            opponent = moves[0].toMove
-            expectedOutcome = moves[1].toOutcome
-            me = nextMove(opponent, expectedOutcome)
+            parts = split(line)
+            opponent = parts[0].toMove
+            me = nextMove(opponent, parts[1].toOutcome)
         result += computeScore(opponent, me)
 
 

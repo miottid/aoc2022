@@ -2,9 +2,7 @@ import sequtils, strutils
 
 
 proc toPriority(c: char): int =
-    result = ord(c)
-    if c.isLowerAscii: result -= 96
-    else: result -= 38
+    ord(c) - (if c.isLowerAscii: 96 else: 38)
 
 
 proc part1(filename: string): int =
