@@ -5,7 +5,7 @@ author        = "David Miotti"
 description   = "Advent of code 2022"
 license       = "MIT"
 srcDir        = "src"
-bin           = @["aoc"]
+bin           = @["aoc2022"]
 
 
 # Dependencies
