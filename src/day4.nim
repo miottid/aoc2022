@@ -1,4 +1,4 @@
-import sequtils, strutils, sugar
+import algorithm, sequtils, strutils
 
 
 proc instructionToRange(instruction: string): seq[int] =
@@ -6,23 +6,24 @@ proc instructionToRange(instruction: string): seq[int] =
     (parseInt(bounds[0]) .. parseInt(bounds[1])).toSeq
 
 
-proc part1(filename: string): int =
+iterator assignmentPairs(filename: string): seq[seq[int]] =
     for line in lines(filename):
-        let assignments = split(line, ",").map(instructionToRange)
-        var 
-            smaller: seq[int]
-            greater: seq[int]
+        let a = split(line, ",").map(instructionToRange)
+        yield if a[0].len > a[1].len: a.reversed()
+              else: a
 
-        if assignments[0].len < assignments[1].len:
-            smaller = assignments[0]
-            greater = assignments[1]
-        else:
-            greater = assignments[0]
-            smaller = assignments[1]
 
-        if smaller.all(a => a in greater):
+proc part1(filename: string): int =
+    for pair in assignmentPairs(filename):
+        if pair[0].allIt(it in pair[1]):
+            result += 1
+
+
+proc part2(filename: string): int =
+    for pair in assignmentPairs(filename):
+        if pair[0].anyIt(it in pair[1]):
             result += 1
 
 
 proc run*(filename: string): tuple[part1: int, part2: int] =
-    (part1(filename), 0)
+    (part1(filename), part2(filename))
