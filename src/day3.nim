@@ -12,7 +12,7 @@ proc part1(filename: string): int =
             c1 = line[line.low..<half].toSeq
             c2 = line[half..line.high].toSeq
             priorities = c1.filterIt(it in c2).deduplicate.map(toPriority)
-        result += priorities.foldl(a + b)
+        result.inc priorities.foldl(a + b)
 
 
 proc part2(filename: string): int =
@@ -30,8 +30,8 @@ proc part2(filename: string): int =
             result += groupItems.map(toPriority).foldl(a + b)
             groupItems = @[]
 
-        cursor += 1
+        cursor.inc
 
 
-proc run*(filename: string): tuple[part1: int, part2: int] =
+proc run*(filename: string): auto =
     (part1(filename), part2(filename))

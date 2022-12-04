@@ -47,20 +47,11 @@ proc computeScore(opponent: Move, me: Move): int =
     ord(me) + ord(computeOutcome(opponent, me))
 
 
-proc part1(filename: string): int =
-    for line in lines(filename):
-        let moves = split(line)
-        result += computeScore(moves[0].toMove, moves[1].toMove)
-
-
-proc part2(filename: string): int =
+proc run*(filename: string): (int, int) =
     for line in lines(filename):
         let 
             parts = split(line)
             opponent = parts[0].toMove
             me = nextMove(opponent, parts[1].toOutcome)
-        result += computeScore(opponent, me)
-
-
-proc run*(filename: string): tuple[part1: int, part2: int] =
-    (part1(filename), part2(filename))
+        result[0].inc computeScore(opponent, parts[1].toMove)
+        result[1].inc computeScore(opponent, me)
