@@ -1,11 +1,13 @@
 proc run*(filename: string): (int, int) =
     let line = readLines(filename, 1)[0]
-    var pastChars: seq[char]
+    var unique: seq[char]
     for i, c in line:
-        let idx = pastChars.find(c)
+        let idx = unique.find(c)
         if idx > -1:
-            pastChars = pastChars[(idx+1)..pastChars.high]
-        pastChars.add(c)
-        if pastChars.len == 4:
+            unique = unique[(idx+1)..unique.high]
+        unique.add(c)
+        if result[0] == 0 and unique.len == 4:
             result[0] = i + 1
+        elif unique.len == 14:
+            result[1] = i + 1
             break
