@@ -23,44 +23,28 @@ proc cd(node: Node[File], dirname: string): Node[File] =
         for child in node.children:
             if child.value.name == dirname:
                 return child
-        result = Node[File](value: File(name: dirname, isDirectory: true))
-        result.parent = node
+        let file = File(name: dirname, isDirectory: true)
+        result = Node[File](value: file, parent: node)
         node.children.add(result)
 
 
-proc `$`(file: File): string =
-    let
-        fileType = (if file.isDirectory: "dir" else: "file")
-        details = "(" & fileType & ", size=" & file.size.intToStr & ")"
-    file.name & " " & details
+proc computeDirSizes(head: Node[File]) =
+    for child in head.children:
+        computeDirSizes(child)
+        head.value.size += child.value.size
 
 
-proc `$`(node: Node[File], level: int = 0): string =
-    let sorted = node.children.sorted((a, b) => a.value.name.cmp(b.value.name))
-    for child in sorted:
-        result &= " ".repeat(level) & "- " & $child.value & "\n"
-        if child.children.len > 0:
-            result &= child$(level + 1)
-
-
-proc computeDirSize(node: Node[File]) =
-    for child in node.children:
-        computeDirSize(child)
-        node.value.size += child.value.size
-
-
-proc findDirsMaxSize(node: Node[File], maxSize: int = 100_000): seq[Node[File]] =
-    for child in node.children:
+proc minMaxDirs(head: Node[File], op: proc(x: int): bool): seq[Node[File]] =
+    for child in head.children:
         if child.value.isDirectory:
-            if child.value.size <= maxSize:
+            if op(child.value.size):
                 result.add(child)
-        result.add(findDirsMaxSize(child))
+        result.add(minMaxDirs(child, op))
 
 
 proc run*(filename: string): (int, int) = 
-    var
-        head = Node[File](value: File(name: "root"))
-        current = head
+    let head = Node[File](value: File())
+    var current = head
 
     for line in lines(filename):
         if line.isEmptyOrWhitespace:
@@ -70,9 +54,21 @@ proc run*(filename: string): (int, int) =
             if parts[1] == "cd":
                 current = current.cd(parts[2])
         elif parts[0] != "dir":
-            let file = File(name: parts[1], size: parseInt(parts[0]))
-            current.children.add(Node[File](value: file))
+            let
+                file = File(name: parts[1], size: parseInt(parts[0]))
+                node = Node[File](value: file, parent: current)
+            current.children.add(node)
 
-    computeDirSize(head)
+    computeDirSizes(head)
 
-    result[0] = findDirsMaxSize(head).mapIt(it.value.size).foldl(a + b)
+    result[0] = minMaxDirs(head, d => d <= 100_000)
+        .mapIt(it.value.size)
+        .foldl(a + b)
+
+    let
+        remaining = 30_000_000 - (70_000_000 - head.value.size)
+        candidates = minMaxDirs(head, d => d >= remaining)
+            .mapIt(it.value.size)
+            .sorted()
+
+    result[1] = candidates[0]
