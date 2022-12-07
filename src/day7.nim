@@ -13,7 +13,7 @@ type
         isDirectory: bool
 
 
-proc cd(node: Node[File], dirname: string): Node[File] =
+func cd(node: Node[File], dirname: string): Node[File] =
     case dirname:
     of ".":
         result = node
@@ -28,13 +28,13 @@ proc cd(node: Node[File], dirname: string): Node[File] =
         node.children.add(result)
 
 
-proc computeDirSizes(head: Node[File]) =
+func computeDirSizes(head: Node[File]) =
     for child in head.children:
         computeDirSizes(child)
         head.value.size += child.value.size
 
 
-proc minMaxDirs(head: Node[File], op: proc(x: int): bool): seq[Node[File]] =
+func minMaxDirs(head: Node[File], op: proc(x: int): bool): seq[Node[File]] =
     for child in head.children:
         if child.value.isDirectory:
             if op(child.value.size):

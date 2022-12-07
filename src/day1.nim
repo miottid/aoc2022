@@ -1,7 +1,7 @@
 import sequtils, algorithm, strutils
 
 
-proc replaceMin(arr: var array[3, int], value: int) =
+func replaceMin(arr: var array[3, int], value: int) =
     for i in arr.low..arr.high:
         if value > arr[i]:
             arr[i] = value

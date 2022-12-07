@@ -6,7 +6,7 @@ type
     Outcome = enum loss = 0, draw = 3, win = 6
 
 
-proc toMove(name: string): Move =
+func toMove(name: string): Move =
     case name:
     of "A", "X": rock
     of "B", "Y": paper
@@ -14,7 +14,7 @@ proc toMove(name: string): Move =
     else: raise newException(ValueError, "cannot resolve move: " & name)
 
 
-proc toOutcome(name: string): Outcome =
+func toOutcome(name: string): Outcome =
     case name:
     of "X": loss
     of "Y": draw
@@ -22,7 +22,7 @@ proc toOutcome(name: string): Outcome =
     else: raise newException(ValueError, "cannot resolve outcome: " & name)
 
 
-proc nextMove(move: Move, outcome: Outcome): Move =
+func nextMove(move: Move, outcome: Outcome): Move =
     case outcome:
     of draw: move
     of win: 
@@ -37,13 +37,13 @@ proc nextMove(move: Move, outcome: Outcome): Move =
         of scissors: paper
 
 
-proc computeOutcome(opponent: Move, me: Move): Outcome =
+func computeOutcome(opponent: Move, me: Move): Outcome =
     if me == opponent: draw
     elif me == opponent.nextMove(win): win
     else: loss
 
 
-proc computeScore(opponent: Move, me: Move): int =
+func computeScore(opponent: Move, me: Move): int =
     ord(me) + ord(computeOutcome(opponent, me))
 
 

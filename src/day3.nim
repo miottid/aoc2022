@@ -1,7 +1,7 @@
 import sequtils, strutils
 
 
-proc toPriority(c: char): int =
+func toPriority(c: char): int =
     ord(c) - (if c.isLowerAscii: 96 else: 38)
 
 

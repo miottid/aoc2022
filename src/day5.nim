@@ -6,7 +6,7 @@ type
     World = tuple[cargo: Cargo, instructions: seq[Instruction]]
 
 
-proc parseInstruction(line: string): Instruction =
+func parseInstruction(line: string): Instruction =
     var a, f, t: int
     discard line.scanf("move $i from $i to $i", a, f, t)
     (a, f-1, t-1)
@@ -25,7 +25,7 @@ proc parseCargoAndInstructions(filename: string): World =
             result.instructions.add(line.parseInstruction)
 
 
-proc cratesOnTop(cargo: Cargo): string = cargo.mapIt(it[it.high]).join()
+func cratesOnTop(cargo: Cargo): string = cargo.mapIt(it[it.high]).join()
 
 
 proc run*(filename: string): auto =
