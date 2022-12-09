@@ -7,6 +7,7 @@ import ../src/day5
 import ../src/day6
 import ../src/day7
 import ../src/day8
+import ../src/day9
 
 
 test "day1": check day1.run("./tests/inputs/day1.txt") == (24000, 45000)
@@ -21,3 +22,4 @@ test "day6-4": check day6.run("./tests/inputs/day6_4.txt") == (10, 29)
 test "day6-5": check day6.run("./tests/inputs/day6_5.txt") == (11, 26)
 test "day7": check day7.run("./tests/inputs/day7.txt") == (95437, 24933642)
 test "day8": check day8.run("./tests/inputs/day8.txt") == (21, 8)
+test "day9": check day9.run("./tests/inputs/day9.txt") == (13, 0)
