@@ -28,7 +28,7 @@ proc parseCargoAndInstructions(filename: string): World =
 func cratesOnTop(cargo: Cargo): string = cargo.mapIt(it[it.high]).join()
 
 
-proc run*(filename: string): auto =
+proc run*(filename: string): (string, string) =
     let (cargo, instructions) = parseCargoAndInstructions(filename)
     var cargo1, cargo2 = cargo
 

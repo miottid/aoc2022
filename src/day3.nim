@@ -33,5 +33,5 @@ proc part2(filename: string): int =
         cursor.inc
 
 
-proc run*(filename: string): auto =
+proc run*(filename: string): (int, int) =
     (part1(filename), part2(filename))

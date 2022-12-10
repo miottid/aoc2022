@@ -20,6 +20,6 @@ proc extractTopThree(filename: string): array[3, int] =
     replaceMin(result, current)
 
 
-proc run*(filename: string): auto =
+proc run*(filename: string): (int, int) =
     let topThree = extractTopThree(filename)
     (topThree.max, topThree.foldl(a + b))

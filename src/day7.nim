@@ -42,7 +42,7 @@ func minMaxDirs(head: Node[File], op: proc(x: int): bool): seq[Node[File]] =
         result.add(minMaxDirs(child, op))
 
 
-proc run*(filename: string): (int, int) = 
+proc run*(filename: string): (int, int) =
     let head = Node[File](value: File())
     var current = head
 

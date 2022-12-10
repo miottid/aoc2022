@@ -4,18 +4,24 @@ import strutils
 type Point = tuple[x, y: int]
 
 
-func isInRange(tail, head: Point): bool =
+const
+    diagonalMoves: seq[Point] = @[(-1,1),(1,1),(-1,-1),(1,-1)]
+    horizontalMoves: seq[Point] = @[(1,0),(-1,0)]
+    verticalMoves: seq[Point] = @[(0,1),(0,-1)]
+
+
+func isInRange(head, tail: Point): bool =
     abs(head.x - tail.x) <= 1 and abs(head.y - tail.y) <= 1
 
 
-func nextPosition(tail, head: Point): Point =
-    let moves: seq[Point] =
-        if head.x == tail.x: @[(0, 1), (0, -1)]
-        elif head.y == tail.y: @[(1, 0), (-1, 0)]
-        else: @[(-1, 1), (1, 1), (-1, -1), (1, -1)]
+func nextPosition(head, tail: Point): Point =
+    let moves =
+        if head.x == tail.x: verticalMoves
+        elif head.y == tail.y: horizontalMoves
+        else: diagonalMoves
     for op in moves:
         let newTail = (tail.x + op.x, tail.y + op.y)
-        if newTail.isInRange(head):
+        if head.isInRange(newTail):
             return newTail
 
 
@@ -28,10 +34,10 @@ proc run*(filename: string): (int, int) =
         let
             parts = line.split(" ")
             op: Point = case parts[0]:
-                of "R": ( 1,  0)
-                of "L": (-1,  0)
-                of "U": ( 0,  1)
-                of "D": ( 0, -1)
+                of "R": verticalMoves[0]
+                of "L": verticalMoves[1]
+                of "U": horizontalMoves[0]
+                of "D": horizontalMoves[1]
                 else: raise newException(ValueError, "invalid direction")
             steps = parseInt($parts[1])
 
@@ -40,8 +46,9 @@ proc run*(filename: string): (int, int) =
             rope[0].y += op.y
 
             for i in 1..rope.high:
-                if not rope[i].isInRange(rope[i-1]):
-                    rope[i] = rope[i].nextPosition(rope[i-1])
+                if rope[i-1].isInRange(rope[i]):
+                    break
+                rope[i] = rope[i-1].nextPosition(rope[i])
 
             if not nextVisits.contains(rope[1]):
                 nextVisits.add(rope[1])
