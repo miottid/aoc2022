@@ -25,4 +25,4 @@ test "day7": check day7.run("./tests/inputs/day7.txt") == (95437, 24933642)
 test "day8": check day8.run("./tests/inputs/day8.txt") == (21, 8)
 test "day9-1": check day9.run("./tests/inputs/day9_1.txt") == (13, 1)
 test "day9-2": check day9.run("./tests/inputs/day9_2.txt") == (88, 36)
-test "day10": check day10.run("./tests/inputs/day10.txt") == (13140, 0)
+test "day10": check day10.run("./tests/inputs/day10.txt") == 13140
