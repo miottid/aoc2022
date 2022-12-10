@@ -1,22 +1,14 @@
-import strutils, sequtils
+import strutils
 
 
-type Point = tuple[x: int, y: int]
+type Point = tuple[x, y: int]
 
 
-func isInRange(tail: Point, head: Point): bool =
-    let computations: seq[Point] = @[
-        (-1,  1), ( 0,  1), ( 1,  1),
-        (-1,  0), ( 0,  0), ( 1,  0),
-        (-1, -1), ( 0, -1), ( 1, -1),
-    ]
-    computations.anyIt(
-        tail.x + it.x == head.x and 
-            tail.y + it.y == head.y
-    )
+func isInRange(tail, head: Point): bool =
+    abs(head.x - tail.x) <= 1 and abs(head.y - tail.y) <= 1
 
 
-func nextPosition(tail: Point, head: Point): Point =
+func nextPosition(tail, head: Point): Point =
     let moves: seq[Point] =
         if head.x == tail.x: @[(0, 1), (0, -1)]
         elif head.y == tail.y: @[(1, 0), (-1, 0)]
@@ -29,11 +21,11 @@ func nextPosition(tail: Point, head: Point): Point =
 
 proc run*(filename: string): (int, int) =
     var
-        head: Point
-        tail: Point
-        visits: seq[Point] = @[(0, 0)]
+        rope = newSeq[Point](10)
+        nextVisits, tailVisits: seq[Point]
+
     for line in lines(filename):
-        let 
+        let
             parts = line.split(" ")
             op: Point = case parts[0]:
                 of "R": ( 1,  0)
@@ -44,10 +36,17 @@ proc run*(filename: string): (int, int) =
             steps = parseInt($parts[1])
 
         for _ in 1..steps:
-            head.x += op.x
-            head.y += op.y
-            if not tail.isInRange(head):
-                tail = tail.nextPosition(head)
-                visits.add(tail)
+            rope[0].x += op.x
+            rope[0].y += op.y
 
-    result[0] = deduplicate(visits).len
+            for i in 1..rope.high:
+                if not rope[i].isInRange(rope[i-1]):
+                    rope[i] = rope[i].nextPosition(rope[i-1])
+
+            if not nextVisits.contains(rope[1]):
+                nextVisits.add(rope[1])
+
+            if not tailVisits.contains(rope[9]):
+                tailVisits.add(rope[9])
+
+    (nextVisits.len, tailVisits.len)
