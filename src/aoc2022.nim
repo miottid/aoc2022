@@ -11,5 +11,6 @@ when isMainModule:
     echo "Day 7 ", day7.run("./inputs/day7.txt")
     echo "Day 8 ", day8.run("./inputs/day8.txt")
     echo "Day 9 ", day9.run("./inputs/day9.txt")
-    echo "Day 10 ", day10.run("./inputs/day10.txt")
+    let resultDay10 = day10.run("./inputs/day10.txt")
+    echo "Day 10 ", resultDay10[0], "\n", resultDay10[1]
     echo "Day 11 ", day11.run("./inputs/day11.txt")

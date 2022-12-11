@@ -13,14 +13,12 @@ const
     testFalseMatch = "If false: throw to monkey $i"
 
 
-proc parseMonkeys(filename: string): seq[Monkey] =
-    var i: int = 0
-    for line in lines(filename):
-        let
-            ln = line.strip()
-            cursor = i mod 7
+proc parseMonkeys(file: string): seq[Monkey] =
+    var i = 0
+    for line in lines(file):
+        let ln = line.strip()
 
-        case cursor:
+        case i mod 7:
         of 0: result.add(Monkey())
         of 1:
             let parts = ln.split(": ")
@@ -77,9 +75,9 @@ func monkeyBusiness(monkeys: seq[Monkey], round: int, divideByThree = true): int
 
             m.starting = @[]
 
-    counts.sorted(Descending)[0..1].foldl(a * b)
+    counts.sorted(Descending)[0..1].foldl(a*b)
 
 
-proc run*(filename: string): (int, int64) =
-    result[0] = monkeyBusiness(parseMonkeys(filename), 20)
-    result[1] = monkeyBusiness(parseMonkeys(filename), 10_000, false)
+proc run*(file: string): (int, int64) =
+    result[0] = parseMonkeys(file).monkeyBusiness(20)
+    result[1] = parseMonkeys(file).monkeyBusiness(10_000, false)

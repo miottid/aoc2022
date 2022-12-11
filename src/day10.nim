@@ -24,7 +24,7 @@ func crtLine(cycles: seq[int], width, ending: int): string =
             break
 
 
-proc run*(filename: string): int =
+proc run*(filename: string): (int, string) =
     var cycles: seq[int]
     for line in lines(filename):
         cycles.add(0)
@@ -36,6 +36,4 @@ proc run*(filename: string): int =
         xs = @[20,60,100,140,180,220].map(x => cycles.xAtCycle(x) * x)
         crts = @[40,80,120,160,200,240].map(x => cycles.crtLine(40, x))
 
-    echo crts.join("\n")
-
-    xs.foldl(a + b)
+    (xs.foldl(a + b), crts.join("\n"))
