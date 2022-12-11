@@ -1,4 +1,4 @@
-import day1, day2, day3, day4, day5, day6, day7, day8, day9, day10
+import day1, day2, day3, day4, day5, day6, day7, day8, day9, day10, day11
 
 
 when isMainModule:
@@ -12,3 +12,4 @@ when isMainModule:
     echo "Day 8 ", day8.run("./inputs/day8.txt")
     echo "Day 9 ", day9.run("./inputs/day9.txt")
     echo "Day 10 ", day10.run("./inputs/day10.txt")
+    echo "Day 11 ", day11.run("./inputs/day11.txt")
