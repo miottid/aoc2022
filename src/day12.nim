@@ -1,5 +1,6 @@
 import algorithm, sequtils, heapqueue, tables
 
+
 type
     Point = tuple[x, y: int]
     World = tuple
