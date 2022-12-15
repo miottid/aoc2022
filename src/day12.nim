@@ -1,4 +1,4 @@
-import heapqueue, tables
+import algorithm, sequtils, heapqueue, tables
 
 type
     Point = tuple[x, y: int]
@@ -7,6 +7,7 @@ type
         width: int
         start: Point
         finish: Point
+        candidates: seq[Point]
 
 
 proc parseWorld(filename: string): World =
@@ -22,6 +23,9 @@ proc parseWorld(filename: string): World =
             elif c == 'E':
                 result.finish = (x, height)
                 ord('z')
+            elif c == 'a':
+                result.candidates.add((x, height))
+                ord(c)
             else:
                 ord(c)
             result.data.add(elevation - minElevation)
@@ -62,3 +66,6 @@ proc run*(filename: string): (int, int) =
                 continue
 
     result[0] = dists[world.start]
+    result[1] = world.candidates
+        .mapIt(dists.getOrDefault(it, high(int)))
+        .sorted(Ascending)[0]
