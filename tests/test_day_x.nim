@@ -11,6 +11,7 @@ import ../src/day9
 import ../src/day10
 import ../src/day11
 import ../src/day12
+import ../src/day13
 
 
 test "day1": check day1.run("./tests/inputs/day1.txt") == (24000, 45000)
@@ -37,3 +38,4 @@ const expectedDay10 = """
 test "day10": check day10.run("./tests/inputs/day10.txt") == (13140, expectedDay10)
 test "day11": check day11.run("./tests/inputs/day11.txt") == (10605, 2713310158)
 test "day12": check day12.run("./tests/inputs/day12.txt") == (31, 29)
+test "day13": check day13.run("./tests/inputs/day13.txt") == (13, 0)
